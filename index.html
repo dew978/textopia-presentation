@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TEXTOPIA 1분 소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Song+Myung&family=Nanum+Brush+Script&display=swap" rel="stylesheet">
+<style>
+:root{--hanji:#F4ECDC;--ink:#2B2420;--ink-soft:#5A4E44;--red:#C8492F;--blue:#3E5C7A;--green:#5C9E61;--gold:#D9A441}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#1E1A17;overflow:hidden;font-family:'Gowun Batang',serif;color:var(--ink)}
+.ink{stroke:#2B2420;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.ink2{stroke:#2B2420;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+h1,h2,h3{font-family:'Song Myung',serif;font-weight:400;margin:0}
+
+/* 1600x900 무대를 화면에 맞춰 확대·축소 */
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;background:var(--hanji);overflow:hidden;transform-origin:center}
+#stage::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(rgba(90,78,68,.07) 1px,transparent 1px);background-size:6px 6px}
+.slide{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:70px 110px;text-align:center;z-index:1}
+.slide.active{display:flex}
+.kicker{font-family:'Nanum Brush Script',cursive;color:var(--red);font-size:44px;margin-bottom:4px}
+.h2{font-size:64px;line-height:1.2}
+.lead{font-size:24px;line-height:1.7;color:var(--ink-soft);margin-top:14px}
+
+.rv{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.on .rv,.rv.on{opacity:1;transform:none}
+.d1{transition-delay:.15s!important}.d2{transition-delay:.35s!important}.d3{transition-delay:.55s!important}.d4{transition-delay:.75s!important}.d5{transition-delay:.95s!important}
+
+/* 쪽 번호·진행 막대 */
+#pg{position:absolute;right:30px;bottom:22px;z-index:5;font-size:18px;color:#9C8E7C;letter-spacing:.1em}
+#bar{position:absolute;left:0;bottom:0;height:6px;background:var(--red);z-index:5;transition:width .5s}
+.hint{position:absolute;left:30px;bottom:22px;z-index:5;font-size:16px;color:#9C8E7C}
+
+/* 1 표지 */
+#s1{padding:0}
+#s1 .scene{position:absolute;inset:0;width:100%;height:100%}
+.mtn{animation:drift 18s ease-in-out infinite alternate}.mtn2{animation:drift 26s ease-in-out infinite alternate-reverse}
+@keyframes drift{from{transform:translateX(-30px)}to{transform:translateX(30px)}}
+.mist{animation:mist 14s ease-in-out infinite alternate}
+@keyframes mist{from{transform:translateX(-80px);opacity:.6}to{transform:translateX(80px);opacity:1}}
+.hero-t{position:relative;z-index:2;margin-top:-90px}
+.logo{font-family:'Song Myung';font-size:168px;letter-spacing:.06em;line-height:1;position:relative;display:inline-block}
+.logo span{display:inline-block;opacity:0;transform:translateY(40px) scale(.9);filter:blur(8px);animation:inkin 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes inkin{to{opacity:1;transform:none;filter:none}}
+.seal{position:absolute;right:-.62em;top:.05em;width:.5em;height:.5em;background:var(--red);color:#FFF4E6;border-radius:.08em;display:grid;place-items:center;transform:rotate(8deg) scale(3);opacity:0;animation:stamp .5s 1.5s cubic-bezier(.3,1.6,.5,1) forwards}
+.seal i{font-style:normal;font-size:.28em}
+@keyframes stamp{to{transform:rotate(8deg) scale(1);opacity:1}}
+.brush{font-family:'Nanum Brush Script';color:var(--red);font-size:64px;margin-top:10px;clip-path:inset(0 100% 0 0);animation:wipe 1.1s 1.8s ease forwards}
+@keyframes wipe{to{clip-path:inset(0 0 0 0)}}
+.tag{display:inline-block;font-size:28px;margin-top:12px;padding:6px 24px;border-radius:40px;background:rgba(251,246,234,.85);opacity:0;animation:fade .9s 2.4s forwards}
+.credit{margin-top:22px;font-size:18px;letter-spacing:.2em;text-shadow:0 0 8px #FBF6EA,0 0 4px #FBF6EA;opacity:0;animation:fade .9s 2.8s forwards}
+@keyframes fade{to{opacity:1}}
+.petal{position:absolute;top:0;width:12px;height:9px;background:#F4B6C5;border-radius:60% 0 60% 0;opacity:.85;z-index:2;animation:fall linear infinite}
+@keyframes fall{from{transform:translate(0,-60px) rotate(0)}to{transform:translate(-140px,960px) rotate(540deg)}}
+
+/* 2 교육적 가치 */
+.versus{display:grid;grid-template-columns:1fr 90px 1fr;gap:30px;align-items:center;width:1100px;margin-top:40px}
+.vcard{background:#FFF8EA;border:3px solid var(--ink);border-radius:24px;padding:26px;box-shadow:0 9px 0 var(--ink)}
+.vcard h3{font-size:32px;margin-top:6px}
+.vcard p{color:var(--ink-soft);font-size:19px;margin:8px 0 0}
+.stack-books{height:150px;display:flex;flex-direction:column-reverse;align-items:center;gap:3px}
+.stack-books i{display:block;height:13px;border-radius:3px;border:1.6px solid var(--ink);opacity:0;transform:translateY(-40px)}
+.on .stack-books i{animation:land .35s forwards}
+@keyframes land{to{opacity:1;transform:none}}
+.counter{font-family:'Song Myung';font-size:50px;color:var(--ink-soft)}
+.strike{position:relative;display:inline-block}
+.strike::after{content:"";position:absolute;left:-8%;top:52%;height:6px;width:0;background:var(--red);border-radius:3px;transform:rotate(-8deg)}
+.on .strike::after{animation:strike .5s 2.2s forwards}
+@keyframes strike{to{width:116%}}
+.arrow{font-family:'Song Myung';font-size:64px;color:var(--red)}
+.deep{height:150px;display:grid;place-items:center;position:relative}
+.ring{position:absolute;border:2px solid var(--blue);border-radius:50%;opacity:0}
+.on .ring{animation:ripple 3s ease-out infinite}
+.ring:nth-child(2){animation-delay:1s!important}.ring:nth-child(3){animation-delay:2s!important}
+@keyframes ripple{from{width:30px;height:30px;opacity:.9}to{width:200px;height:200px;opacity:0}}
+.onebook{width:60px;height:80px;background:var(--blue);border:2.5px solid var(--ink);border-radius:4px 8px 8px 4px;position:relative;z-index:2;box-shadow:inset 8px 0 0 rgba(0,0,0,.2)}
+.onebook::after{content:"";position:absolute;left:16px;right:8px;top:14px;height:20px;background:#FFF8EA;border:1.4px solid var(--ink)}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;width:1200px;margin-top:44px}
+.val{border-top:4px solid var(--ink);padding-top:14px;text-align:left}
+.val b{font-family:'Song Myung';font-weight:400;font-size:28px;display:block}
+.val span{font-size:19px;color:var(--ink-soft);line-height:1.6}
+.val em{font-style:normal;color:var(--red);font-family:'Song Myung';font-size:22px;margin-right:6px}
+
+/* 3 책 = 집, 깊이 읽을수록 */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;width:1320px;margin-top:40px;position:relative}
+.stages::before{content:"";position:absolute;left:10%;right:10%;top:118px;height:3px;background:repeating-linear-gradient(90deg,var(--ink) 0 10px,transparent 10px 18px);transform:scaleX(0);transform-origin:left}
+.on .stages::before{animation:grow 2.2s .3s forwards}
+@keyframes grow{to{transform:scaleX(1)}}
+.st svg{width:230px;height:200px;display:block;margin:0 auto;opacity:0;transform:translateY(40px) scale(.6)}
+.on .st svg{animation:rise .8s cubic-bezier(.3,1.5,.5,1) forwards}
+.on .st:nth-child(2) svg{animation-delay:.6s}.on .st:nth-child(3) svg{animation-delay:1.2s}.on .st:nth-child(4) svg{animation-delay:1.8s}
+@keyframes rise{to{opacity:1;transform:none}}
+.st h3{font-size:34px;margin-top:4px}
+.st p{font-size:20px;line-height:1.55;color:var(--ink-soft);margin:6px 0 0}
+.st .need{display:inline-block;margin-top:10px;font-size:17px;background:#FFF8EA;border:1.6px solid var(--ink);border-radius:20px;padding:4px 14px}
+.st:last-child .need{background:var(--red);color:#FFF4E6;border-color:var(--red)}
+
+/* 4 text hip */
+.hipwrap{display:grid;grid-template-columns:560px 1fr;gap:60px;align-items:center;width:1340px;margin-top:20px;text-align:left}
+.venn{position:relative;width:560px;height:520px}
+.vc{position:absolute;width:310px;height:310px;border-radius:50%;border:3px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;mix-blend-mode:multiply;opacity:0;transform:scale(.5)}
+.vc h3{font-size:54px}
+.vc.a{background:rgba(200,73,47,.24);left:125px;top:0}
+.vc.b{background:rgba(62,92,122,.26);left:0;top:200px}
+.vc.c{background:rgba(92,158,97,.26);left:250px;top:200px}
+.on .vc{animation:pop .7s cubic-bezier(.3,1.4,.5,1) forwards}
+.on .vc.b{animation-delay:.25s}.on .vc.c{animation-delay:.5s}
+@keyframes pop{to{opacity:1;transform:none}}
+.vcore{position:absolute;left:280px;top:300px;transform:translate(-50%,-50%) scale(0);background:var(--ink);color:#FFF4E6;font-family:'Song Myung';padding:9px 18px;border-radius:30px;font-size:19px;white-space:nowrap;z-index:2}
+.on .vcore{animation:core .6s 1s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes core{to{transform:translate(-50%,-50%) scale(1)}}
+.how{display:flex;flex-direction:column;gap:18px}
+.how .row{display:flex;gap:18px;align-items:flex-start;background:#FFF8EA;border:2.5px solid var(--ink);border-radius:18px;padding:18px 22px}
+.how .dot{flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-family:'Song Myung';font-size:24px;color:#FFF4E6;border:2.5px solid var(--ink)}
+.how b{font-family:'Song Myung';font-weight:400;font-size:26px;display:block}
+.how span{font-size:19px;color:var(--ink-soft);line-height:1.55}
+.how i{font-style:normal;display:inline-block;margin:6px 6px 0 0;font-size:16px;padding:2px 10px;border:1.4px solid var(--ink);border-radius:14px;background:#fff}
+
+/* 5 마무리 */
+#s5{background:var(--ink);color:#F4ECDC}
+#s5 .h2{color:#F4ECDC;font-size:72px}
+#s5 .lead{color:#D8CDB8}
+.final-seal{display:grid;place-items:center;width:100px;height:100px;background:var(--red);border-radius:12px;font-family:'Song Myung';font-size:54px;color:#FFF4E6;opacity:0;transform:rotate(8deg) scale(3);margin-bottom:30px}
+.on .final-seal{animation:stamp .5s cubic-bezier(.3,1.6,.5,1) forwards}
+.url{margin-top:30px;font-size:22px;color:#BFB29B;letter-spacing:.04em}
+.url b{display:inline-block;margin-top:8px;font-family:'Song Myung';font-weight:400;font-size:30px;color:#F4ECDC;border:2.5px solid #F4ECDC;border-radius:40px;padding:10px 34px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7F0E1"/><stop offset="1" stop-color="#EDE2CA"/></linearGradient>
+  <linearGradient id="mtnFar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FA597"/><stop offset="1" stop-color="#E8DFC8" stop-opacity="0"/></linearGradient>
+  <linearGradient id="mtnNear" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#556F60"/><stop offset=".7" stop-color="#93A894" stop-opacity=".4"/><stop offset="1" stop-color="#E8DFC8" stop-opacity="0"/></linearGradient>
+  <radialGradient id="mist" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#FBF6EA"/><stop offset="1" stop-color="#FBF6EA" stop-opacity="0"/></radialGradient>
+  <filter id="inkblur"><feGaussianBlur stdDeviation="2"/></filter>
+  <filter id="paper" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/>
+    <feColorMatrix values="0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .2  0 0 0 .07 0"/>
+    <feComposite in2="SourceGraphic" operator="in"/>
+  </filter>
+
+  <!-- 집 4단계 (viewBox 200x180, 바닥 중심 100,165) -->
+  <symbol id="h-plot" viewBox="0 0 200 180">
+    <ellipse cx="100" cy="150" rx="74" ry="22" fill="#E3CB98" class="ink2"/>
+    <ellipse cx="96" cy="146" rx="50" ry="12" fill="#ECD8AC"/>
+    <path d="M34 146 Q66 164 100 172 Q134 164 166 146 Q134 132 100 128 Q66 132 34 146Z" fill="none" stroke="#B38A4E" stroke-width="2.5" stroke-dasharray="1 0"/>
+    <g fill="#9A6440" class="ink2"><rect x="30" y="126" width="8" height="24" rx="3"/><rect x="162" y="126" width="8" height="24" rx="3"/><rect x="96" y="108" width="8" height="24" rx="3"/><rect x="96" y="152" width="8" height="24" rx="3"/></g>
+    <path d="M104 150 v-22" stroke="#7A5134" stroke-width="5" stroke-linecap="round"/>
+    <path d="M104 132 Q86 132 84 118 Q100 114 104 130Z M104 128 Q122 126 124 110 Q106 108 104 126Z" fill="#7DBB5F" class="ink2"/>
+    <g transform="translate(140 98)"><rect x="-3" y="10" width="6" height="40" fill="#8A5A3C" class="ink2"/><rect x="-26" y="-6" width="52" height="24" rx="5" fill="#D6A877" class="ink2"/><text x="0" y="11" text-anchor="middle" font-family="Song Myung" font-size="14" fill="#2B2420">집터</text></g>
+  </symbol>
+
+  <symbol id="h-pit" viewBox="0 0 200 180">
+    <ellipse cx="100" cy="162" rx="70" ry="12" fill="#000" opacity=".13"/>
+    <path d="M36 158 Q56 106 100 36 Q144 106 164 158 Q100 174 36 158Z" fill="#D9B46E" class="ink"/>
+    <path d="M58 152 Q74 108 100 48 M142 152 Q126 108 100 48 M80 162 Q88 112 100 44 M120 162 Q112 112 100 44" stroke="#B89150" stroke-width="2.2" fill="none"/>
+    <path d="M48 134 Q100 150 152 134 M64 104 Q100 116 136 104" stroke="#A07C3E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M82 164 L82 140 Q100 122 118 140 L118 164 Z" fill="#4A3628" class="ink"/>
+    <path d="M93 42 L100 22 L107 42 Z" fill="#B89150" class="ink2"/>
+    <path d="M66 156 q-6 -10 0 -16 M140 156 q6 -10 0 -16" stroke="#7DBB5F" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="h-thatch" viewBox="0 0 200 180">
+    <ellipse cx="100" cy="162" rx="82" ry="13" fill="#000" opacity=".13"/>
+    <rect x="42" y="146" width="116" height="16" rx="6" fill="#D9D0C2" class="ink"/>
+    <rect x="50" y="98" width="100" height="50" fill="#F0DAAE" class="ink"/>
+    <path d="M50 108 H150" stroke="#B48A5A" stroke-width="2"/>
+    <rect x="50" y="98" width="6" height="50" fill="#9A6440"/><rect x="144" y="98" width="6" height="50" fill="#9A6440"/>
+    <rect x="86" y="112" width="28" height="36" rx="3" fill="#A86E45" class="ink"/>
+    <circle cx="109" cy="131" r="2" fill="#2B2420"/>
+    <rect x="60" y="114" width="20" height="18" rx="2" fill="#FFF8E8" class="ink2"/><path d="M70 114 v18 M60 123 h20" stroke="#2B2420" stroke-width="1.2"/>
+    <rect x="120" y="114" width="20" height="18" rx="2" fill="#FFF8E8" class="ink2"/><path d="M130 114 v18 M120 123 h20" stroke="#2B2420" stroke-width="1.2"/>
+    <path d="M18 112 Q12 68 62 52 Q100 38 138 52 Q188 68 182 112 Q100 128 18 112Z" fill="#E4BE6F" class="ink"/>
+    <path d="M22 104 Q100 120 178 104 Q181 109 182 112 Q100 128 18 112 Q19 108 22 104Z" fill="#C9A052"/>
+    <path d="M44 64 Q58 90 48 112 M76 50 Q84 90 78 120 M124 50 Q116 90 122 120 M156 64 Q142 90 152 112 M28 88 Q100 104 172 88" stroke="#B88E45" stroke-width="2.2" fill="none"/>
+    <path d="M60 50 Q80 46 98 50" stroke="#6FA756" stroke-width="2.5" fill="none"/>
+    <circle cx="70" cy="52" r="11" fill="#FFFBEE" class="ink2"/><path d="M66 46 q4 -3 8 0" stroke="#D9CFB6" stroke-width="2" fill="none"/>
+    <circle cx="122" cy="46" r="8" fill="#FFFBEE" class="ink2"/>
+    <ellipse cx="96" cy="47" rx="7" ry="4" fill="#7DBB5F" class="ink2" transform="rotate(-20 96 47)"/>
+    <rect x="150" y="70" width="12" height="20" fill="#B9AFA0" class="ink2"/>
+  </symbol>
+
+  <symbol id="h-tile" viewBox="0 0 200 180">
+    <ellipse cx="100" cy="163" rx="90" ry="13" fill="#000" opacity=".13"/>
+    <rect x="24" y="140" width="152" height="22" rx="6" fill="#D3CABC" class="ink"/>
+    <rect x="28" y="141" width="144" height="6" rx="3" fill="#E7E0D4"/>
+    <rect x="86" y="158" width="28" height="9" rx="2" fill="#C2B8A8" class="ink2"/>
+    <rect x="40" y="94" width="120" height="47" fill="#FFF7E6" class="ink"/>
+    <g fill="#9A6440"><rect x="40" y="94" width="6" height="47"/><rect x="72" y="94" width="6" height="47"/><rect x="122" y="94" width="6" height="47"/><rect x="154" y="94" width="6" height="47"/></g>
+    <rect x="84" y="102" width="32" height="39" fill="#F7E6C4" class="ink2"/>
+    <path d="M100 102 v39 M84 114 h32 M84 127 h32 M92 102 v39 M108 102 v39" stroke="#B48A5A" stroke-width="1"/>
+    <rect x="50" y="106" width="16" height="20" fill="#F7E6C4" class="ink2"/><rect x="134" y="106" width="16" height="20" fill="#F7E6C4" class="ink2"/>
+    <path d="M58 106 v20 M50 116 h16 M142 106 v20 M134 116 h16" stroke="#B48A5A" stroke-width="1"/>
+    <rect x="40" y="94" width="120" height="7" fill="#000" opacity=".16"/>
+    <path d="M4 88 Q24 98 42 82 L62 52 Q100 42 138 52 L158 82 Q176 98 196 88 Q186 108 156 102 L44 102 Q14 108 4 88Z" fill="#525C6B" class="ink"/>
+    <path d="M62 52 Q100 42 138 52 L147 66 Q100 55 53 66Z" fill="#717D8E"/>
+    <g stroke="#3D4552" stroke-width="1.6" fill="none"><path d="M60 70 Q58 86 52 100"/><path d="M74 66 Q73 84 70 101"/><path d="M88 64 Q88 84 86 101"/><path d="M100 63 V101"/><path d="M112 64 Q112 84 114 101"/><path d="M126 66 Q127 84 130 101"/><path d="M140 70 Q142 86 148 100"/></g>
+    <path d="M44 102 L156 102" stroke="#8994A5" stroke-width="3"/>
+    <path d="M52 56 Q100 36 148 56" stroke="#2F3540" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <path d="M52 56 Q42 52 45 42 M148 56 Q158 52 155 42" stroke="#2F3540" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- 건물 (viewBox 300x240, 바닥 중심 150,222) -->
+  <symbol id="b-seodang" viewBox="0 0 300 240">
+    <ellipse cx="150" cy="222" rx="124" ry="16" fill="#000" opacity=".13"/>
+    <rect x="40" y="188" width="220" height="28" rx="7" fill="#D3CABC" class="ink"/>
+    <rect x="128" y="210" width="44" height="12" rx="3" fill="#C2B8A8" class="ink2"/>
+    <rect x="52" y="178" width="196" height="12" fill="#C99566" class="ink2"/>
+    <rect x="56" y="122" width="188" height="58" fill="#FFF7E6" class="ink"/>
+    <rect x="110" y="132" width="80" height="46" fill="#6B4A34"/>
+    <rect x="122" y="162" width="56" height="10" rx="2" fill="#B07A4E"/>
+    <rect x="126" y="152" width="12" height="10" fill="#F4E9D0"/><rect x="160" y="150" width="14" height="12" fill="#E8D4AA"/>
+    <rect x="66" y="132" width="36" height="46" fill="#F7E6C4" class="ink2"/><rect x="198" y="132" width="36" height="46" fill="#F7E6C4" class="ink2"/>
+    <path d="M84 132 v46 M66 147 h36 M66 162 h36 M216 132 v46 M198 147 h36 M198 162 h36" stroke="#B48A5A" stroke-width="1.2"/>
+    <g fill="#9A6440"><rect x="56" y="122" width="7" height="58"/><rect x="104" y="122" width="7" height="58"/><rect x="189" y="122" width="7" height="58"/><rect x="237" y="122" width="7" height="58"/></g>
+    <rect x="56" y="122" width="188" height="8" fill="#000" opacity=".16"/>
+    <path d="M10 116 Q38 128 60 108 L88 68 Q150 54 212 68 L240 108 Q262 128 290 116 Q276 140 236 132 L64 132 Q24 140 10 116Z" fill="#525C6B" class="ink"/>
+    <path d="M88 68 Q150 54 212 68 L222 84 Q150 70 78 84Z" fill="#717D8E"/>
+    <g stroke="#3D4552" stroke-width="1.8" fill="none"><path d="M82 90 Q78 112 70 130"/><path d="M104 84 Q102 108 98 131"/><path d="M127 82 V131"/><path d="M150 81 V131"/><path d="M173 82 V131"/><path d="M196 84 Q198 108 202 131"/><path d="M218 90 Q222 112 230 130"/></g>
+    <path d="M64 132 L236 132" stroke="#8994A5" stroke-width="3.5"/>
+    <path d="M78 72 Q150 46 222 72" stroke="#2F3540" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <path d="M78 72 Q64 66 68 54 M222 72 Q236 66 232 54" stroke="#2F3540" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <rect x="122" y="134" width="56" height="20" rx="3" fill="#2B2420"/><text x="150" y="149" text-anchor="middle" font-family="Song Myung" font-size="14" fill="#F4E3B5">서 당</text>
+  </symbol>
+
+
+  <symbol id="b-market" viewBox="0 0 300 240">
+    <ellipse cx="150" cy="222" rx="128" ry="16" fill="#000" opacity=".13"/>
+    <g id="stall">
+    </g>
+    <!-- 가게 셋 -->
+    <g>
+      <rect x="40" y="128" width="5" height="70" fill="#8A5A3C" class="ink2"/><rect x="101" y="128" width="5" height="70" fill="#8A5A3C" class="ink2"/>
+      <rect x="34" y="176" width="78" height="24" rx="3" fill="#C99566" class="ink2"/>
+      <ellipse cx="56" cy="174" rx="14" ry="6" fill="#B07A4E" class="ink2"/><circle cx="52" cy="168" r="5.5" fill="#F0873A" class="ink2"/><circle cx="61" cy="168" r="5.5" fill="#F0873A" class="ink2"/><circle cx="56" cy="162" r="5.5" fill="#F0873A" class="ink2"/>
+      <ellipse cx="90" cy="174" rx="14" ry="6" fill="#B07A4E" class="ink2"/><circle cx="85" cy="168" r="5.5" fill="#E8564A" class="ink2"/><circle cx="95" cy="168" r="5.5" fill="#E8564A" class="ink2"/>
+      <path d="M28 130 L40 108 L106 108 L118 130 Q108 140 98 130 Q88 140 78 130 Q68 140 58 130 Q48 140 38 130 Q33 136 28 130Z" fill="#E8735A" class="ink"/>
+      <path d="M58 108 L52 130 M73 108 V130 M88 108 L94 130" stroke="#FFF4E6" stroke-width="5"/>
+    </g>
+    <g>
+      <rect x="118" y="120" width="5" height="78" fill="#8A5A3C" class="ink2"/><rect x="179" y="120" width="5" height="78" fill="#8A5A3C" class="ink2"/>
+      <rect x="112" y="172" width="78" height="28" rx="3" fill="#C99566" class="ink2"/>
+      <rect x="120" y="156" width="18" height="16" rx="2" fill="#6FA0C8" class="ink2"/><rect x="140" y="150" width="18" height="22" rx="2" fill="#F2C14E" class="ink2"/><rect x="160" y="158" width="18" height="14" rx="2" fill="#E9A3B4" class="ink2"/>
+      <path d="M106 122 L118 100 L184 100 L196 122 Q186 132 176 122 Q166 132 156 122 Q146 132 136 122 Q126 132 116 122 Q111 128 106 122Z" fill="#F2C14E" class="ink"/>
+      <path d="M136 100 L130 122 M151 100 V122 M166 100 L172 122" stroke="#FFF4E6" stroke-width="5"/>
+    </g>
+    <g>
+      <rect x="196" y="128" width="5" height="70" fill="#8A5A3C" class="ink2"/><rect x="257" y="128" width="5" height="70" fill="#8A5A3C" class="ink2"/>
+      <rect x="190" y="176" width="78" height="24" rx="3" fill="#C99566" class="ink2"/>
+      <rect x="200" y="160" width="22" height="16" rx="2" fill="#FFFDF4" class="ink2"/><path d="M204 165 h14 M204 170 h10" stroke="#2B2420" stroke-width="1.4"/>
+      <rect x="230" y="156" width="26" height="20" rx="2" fill="#FFFDF4" class="ink2"/><path d="M234 161 h18 M234 166 h12 M234 171 h16" stroke="#2B2420" stroke-width="1.4"/>
+      <path d="M184 130 L196 108 L262 108 L274 130 Q264 140 254 130 Q244 140 234 130 Q224 140 214 130 Q204 140 194 130 Q189 136 184 130Z" fill="#7FB3D5" class="ink"/>
+      <path d="M214 108 L208 130 M229 108 V130 M244 108 L250 130" stroke="#FFF4E6" stroke-width="5"/>
+    </g>
+    <rect x="146" y="46" width="5" height="74" fill="#8A5A3C" class="ink2"/>
+    <path d="M151 50 h34 l-6 10 6 10 h-34z" fill="#C8492F" class="ink2"/><text x="166" y="65" text-anchor="middle" font-family="Song Myung" font-size="12" fill="#FFF4E6">장터</text>
+  </symbol>
+
+  <symbol id="b-pavilion" viewBox="0 0 300 240">
+    <ellipse cx="150" cy="222" rx="96" ry="14" fill="#000" opacity=".13"/>
+    <rect x="76" y="196" width="148" height="20" rx="7" fill="#D3CABC" class="ink"/>
+    <rect x="68" y="182" width="164" height="16" fill="#C99566" class="ink2"/>
+    <g fill="#9A6440" class="ink2"><rect x="84" y="112" width="8" height="72"/><rect x="124" y="112" width="8" height="72"/><rect x="168" y="112" width="8" height="72"/><rect x="208" y="112" width="8" height="72"/></g>
+    <path d="M72 182 v-16 h156 v16" stroke="#7A5134" stroke-width="4" fill="none"/>
+    <path d="M90 166 v16 M106 166 v16 M140 166 v16 M156 166 v16 M184 166 v16 M200 166 v16" stroke="#7A5134" stroke-width="3"/>
+    <path d="M36 118 Q64 128 82 110 L150 52 L218 110 Q236 128 264 118 Q252 140 214 130 L86 130 Q48 140 36 118Z" fill="#525C6B" class="ink"/>
+    <path d="M150 52 L200 104 L150 98 L100 104Z" fill="#717D8E"/>
+    <path d="M150 54 L150 98 M120 80 L104 124 M180 80 L196 124" stroke="#3D4552" stroke-width="1.8"/>
+    <path d="M86 130 L214 130" stroke="#8994A5" stroke-width="3.5"/>
+    <circle cx="150" cy="46" r="7" fill="#2F3540"/><path d="M150 40 v-10" stroke="#2F3540" stroke-width="3"/>
+  </symbol>
+
+  <symbol id="b-pond" viewBox="0 0 300 240">
+    <ellipse cx="150" cy="176" rx="132" ry="56" fill="#7EC2CE" class="ink"/>
+    <ellipse cx="146" cy="170" rx="112" ry="42" fill="#9AD5DD"/>
+    <path d="M84 164 h28 M170 186 h34 M126 150 h22" stroke="#E6F7F8" stroke-width="3" stroke-linecap="round"/>
+    <ellipse cx="96" cy="182" rx="18" ry="8" fill="#6FAE62" class="ink2"/><circle cx="98" cy="176" r="6" fill="#F6B9C8" class="ink2"/>
+    <ellipse cx="200" cy="160" rx="16" ry="7" fill="#6FAE62" class="ink2"/><ellipse cx="180" cy="196" rx="12" ry="5" fill="#6FAE62" class="ink2"/>
+    <circle cx="202" cy="154" r="5" fill="#FFFFFF" class="ink2"/>
+    <ellipse cx="40" cy="190" rx="16" ry="11" fill="#BDB6AA" class="ink2"/><ellipse cx="262" cy="176" rx="14" ry="10" fill="#BDB6AA" class="ink2"/>
+  </symbol>
+
+  <symbol id="b-seowon" viewBox="0 0 300 240">
+    <ellipse cx="150" cy="222" rx="134" ry="16" fill="#000" opacity=".13"/>
+    <rect x="20" y="192" width="260" height="26" rx="7" fill="#D3CABC" class="ink"/>
+    <rect x="36" y="128" width="228" height="64" fill="#FFF7E6" class="ink"/>
+    <g fill="#9A6440"><rect x="36" y="128" width="7" height="64"/><rect x="92" y="128" width="7" height="64"/><rect x="146" y="128" width="7" height="64"/><rect x="201" y="128" width="7" height="64"/><rect x="257" y="128" width="7" height="64"/></g>
+    <rect x="104" y="140" width="92" height="52" fill="#F7E6C4" class="ink2"/><path d="M127 140 v52 M150 140 v52 M173 140 v52 M104 158 h92 M104 175 h92" stroke="#B48A5A" stroke-width="1.2"/>
+    <path d="M2 122 Q32 136 54 114 L84 70 Q150 54 216 70 L246 114 Q268 136 298 122 Q284 148 242 138 L58 138 Q16 148 2 122Z" fill="#525C6B" class="ink"/>
+    <path d="M84 70 Q150 54 216 70 L226 86 Q150 72 74 86Z" fill="#717D8E"/>
+    <path d="M74 74 Q150 46 226 74" stroke="#2F3540" stroke-width="10" fill="none" stroke-linecap="round"/>
+    <rect x="114" y="140" width="72" height="20" rx="3" fill="#2B2420"/><text x="150" y="155" text-anchor="middle" font-family="Song Myung" font-size="14" fill="#F4E3B5">서 원</text>
+  </symbol>
+
+  <!-- 나무와 소품 (viewBox 120x160, 바닥 중심 60,150) -->
+  <symbol id="t-pine" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="34" ry="8" fill="#000" opacity=".12"/>
+    <path d="M55 150 Q48 120 60 100 Q67 86 57 70 L66 68 Q76 88 69 103 Q62 122 67 150Z" fill="#8A5A3C" class="ink2"/>
+    <path d="M14 94 Q16 74 42 74 Q52 60 72 66 Q96 62 104 80 Q116 94 98 102 Q60 110 24 104 Q10 102 14 94Z" fill="#4C8B55" class="ink"/>
+    <path d="M28 62 Q32 44 54 46 Q64 34 82 42 Q98 46 96 60 Q92 72 60 72 Q32 72 28 62Z" fill="#5C9E61" class="ink"/>
+    <path d="M42 36 Q48 20 64 22 Q82 22 82 36 Q78 48 60 48 Q44 48 42 36Z" fill="#6DB26D" class="ink"/>
+    <path d="M28 86 Q46 80 66 82 M42 56 Q56 52 72 54 M54 32 Q62 28 72 30" stroke="#93CC86" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="t-persimmon" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="36" ry="8" fill="#000" opacity=".12"/>
+    <path d="M55 150 Q53 122 57 102 L65 102 Q69 124 67 150Z M58 112 L44 96 M64 110 L80 94" fill="#8A5A3C" stroke="#8A5A3C" stroke-width="4" class="ink2"/>
+    <path d="M16 84 Q10 54 38 42 Q52 20 78 30 Q106 34 106 60 Q116 84 96 98 Q78 112 56 106 Q24 108 16 84Z" fill="#7DB45E" class="ink"/>
+    <path d="M30 60 Q36 40 58 40 Q78 34 90 50 Q74 46 60 50 Q42 52 30 60Z" fill="#9BCB79"/>
+    <g fill="#F0873A" class="ink2"><circle cx="38" cy="72" r="6"/><circle cx="66" cy="58" r="6"/><circle cx="86" cy="80" r="6"/><circle cx="56" cy="90" r="6"/><circle cx="92" cy="58" r="5"/><circle cx="28" cy="88" r="5"/></g>
+  </symbol>
+  <symbol id="t-blossom" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="36" ry="8" fill="#000" opacity=".12"/>
+    <path d="M55 150 Q50 124 58 104 L66 104 Q70 126 67 150Z" fill="#6E4A36" class="ink2"/>
+    <path d="M58 112 L40 98 M64 110 L84 96" stroke="#6E4A36" stroke-width="4"/>
+    <path d="M14 84 Q8 54 38 42 Q52 20 78 30 Q106 34 106 60 Q116 84 96 98 Q78 112 56 106 Q22 108 14 84Z" fill="#F4B6C5" class="ink"/>
+    <path d="M30 58 Q36 40 58 40 Q78 34 90 50 Q74 46 60 50 Q42 52 30 58Z" fill="#FAD3DC"/>
+    <g fill="#FFFFFF"><circle cx="36" cy="70" r="3"/><circle cx="62" cy="56" r="3"/><circle cx="88" cy="74" r="3"/><circle cx="54" cy="88" r="3"/><circle cx="80" cy="92" r="2.5"/><circle cx="26" cy="86" r="2.5"/><circle cx="96" cy="58" r="2.5"/></g>
+  </symbol>
+  <symbol id="t-bush" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="34" ry="7" fill="#000" opacity=".12"/>
+    <path d="M24 148 Q14 124 36 118 Q46 98 68 106 Q94 102 96 126 Q106 146 84 150Z" fill="#6FAE62" class="ink"/>
+    <path d="M36 122 Q48 110 64 114" stroke="#93CC86" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="48" cy="134" r="3" fill="#F29BB2"/><circle cx="74" cy="126" r="3" fill="#FFF"/><circle cx="82" cy="140" r="3" fill="#F7D154"/>
+  </symbol>
+  <symbol id="p-rock" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="30" ry="6" fill="#000" opacity=".12"/>
+    <path d="M28 148 Q24 122 48 116 Q70 108 86 124 Q98 140 90 150Z" fill="#BDB6AA" class="ink"/>
+    <path d="M42 124 Q56 118 70 122" stroke="#DDD7CC" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="p-jar" viewBox="0 0 120 160">
+    <ellipse cx="60" cy="150" rx="40" ry="8" fill="#000" opacity=".12"/>
+    <rect x="18" y="138" width="84" height="12" rx="4" fill="#C9C0B2" class="ink2"/>
+    <path d="M28 138 Q20 112 36 102 L52 102 Q66 112 58 138Z" fill="#7E4A2E" class="ink2"/><rect x="34" y="96" width="20" height="8" rx="3" fill="#6A3D25" class="ink2"/>
+    <path d="M60 138 Q54 118 66 110 L82 110 Q94 118 90 138Z" fill="#8E5634" class="ink2"/><rect x="64" y="104" width="20" height="8" rx="3" fill="#6A3D25" class="ink2"/>
+    <path d="M38 110 Q42 108 46 110" stroke="#B98463" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="p-sign" viewBox="0 0 120 160">
+    <rect x="57" y="96" width="7" height="54" fill="#8A5A3C" class="ink2"/>
+    <rect x="16" y="70" width="88" height="40" rx="7" fill="#D6A877" class="ink"/>
+  </symbol>
+
+  <!-- 아이 캐릭터: 발 위치가 (0,0) -->
+  <g id="kid-a">
+    <ellipse cx="0" cy="0" rx="11" ry="3.5" fill="#000" opacity=".15"/>
+    <g class="bobk">
+      <path d="M10 -26 Q18 -18 14 -6" stroke="#C8492F" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M-11 -1 Q-8 -24 0 -24 Q8 -24 11 -1 Z" fill="#E9A3B4" class="ink2"/>
+      <path d="M-9 -20 Q0 -26 9 -20 L10 -12 L-10 -12Z" fill="#F7D154" class="ink2"/>
+      <path d="M-2 -18 L3 -12" stroke="#C8492F" stroke-width="2"/>
+      <circle cx="0" cy="-31" r="10" fill="#F6D7B8" class="ink2"/>
+      <path d="M-10 -32 Q-8 -44 0 -43 Q8 -44 10 -32 Q6 -37 0 -36 Q-6 -37 -10 -32Z" fill="#2B2420"/>
+      <circle cx="-3.5" cy="-30" r="1.4" fill="#2B2420"/><circle cx="3.5" cy="-30" r="1.4" fill="#2B2420"/>
+      <circle cx="-6" cy="-26.5" r="2" fill="#F29BB2" opacity=".8"/><circle cx="6" cy="-26.5" r="2" fill="#F29BB2" opacity=".8"/>
+    </g>
+  </g>
+  <g id="kid-b">
+    <ellipse cx="0" cy="0" rx="11" ry="3.5" fill="#000" opacity=".15"/>
+    <g class="bobk">
+      <path d="M-10 -1 L-9 -22 Q0 -26 9 -22 L10 -1 Z" fill="#5B7FB0" class="ink2"/>
+      <path d="M-9 -22 Q0 -26 9 -22 L10 -13 L-10 -13Z" fill="#FFF7E6" class="ink2"/>
+      <rect x="-9" y="-14" width="18" height="3" fill="#C8492F"/>
+      <circle cx="0" cy="-31" r="10" fill="#F6D7B8" class="ink2"/>
+      <path d="M-10 -33 Q0 -45 10 -33 Q0 -38 -10 -33Z" fill="#2B2420"/>
+      <ellipse cx="0" cy="-41" rx="15" ry="3.5" fill="#2B2420"/><rect x="-6" y="-52" width="12" height="11" rx="3" fill="#3A332E"/>
+      <circle cx="-3.5" cy="-30" r="1.4" fill="#2B2420"/><circle cx="3.5" cy="-30" r="1.4" fill="#2B2420"/>
+      <path d="M-2.5 -25.5 Q0 -23.5 2.5 -25.5" stroke="#2B2420" stroke-width="1.2" fill="none"/>
+    </g>
+  </g>
+</defs>
+</svg>
+<div id="stage">
+
+<!-- 1 표지 -->
+<section class="slide" id="s1">
+  <svg class="scene" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <rect width="1600" height="900" fill="url(#sky)"/>
+    <circle cx="1250" cy="190" r="70" fill="#E8735A" opacity=".85"/>
+    <g class="mtn"><path d="M-100 560 Q120 330 300 420 Q460 260 640 400 Q820 250 1000 380 Q1200 230 1380 360 Q1520 300 1700 420 L1700 900 L-100 900Z" fill="url(#mtnFar)"/></g>
+    <g class="mtn2"><path d="M-100 650 Q160 460 380 560 Q560 440 760 560 Q960 430 1160 560 Q1360 470 1700 580 L1700 900 L-100 900Z" fill="url(#mtnNear)"/></g>
+    <ellipse class="mist" cx="500" cy="560" rx="420" ry="50" fill="url(#mist)"/>
+    <ellipse class="mist" cx="1200" cy="620" rx="380" ry="46" fill="url(#mist)"/>
+    <path d="M-50 760 Q400 700 800 740 T1650 730 L1650 900 L-50 900Z" fill="#A9CF7F"/>
+    <path d="M-50 760 Q400 700 800 740 T1650 730" stroke="#2B2420" stroke-width="2.5" fill="none"/>
+    <use href="#h-thatch" x="170" y="600" width="230" height="207"/>
+    <use href="#h-tile" x="1190" y="590" width="250" height="225"/>
+    <use href="#t-pine" x="60" y="590" width="150" height="200"/>
+    <use href="#t-persimmon" x="1420" y="600" width="140" height="187"/>
+    <use href="#t-blossom" x="420" y="640" width="110" height="147"/>
+    <use href="#p-jar" x="1100" y="700" width="100" height="133"/>
+    <use href="#kid-a" transform="translate(560 800) scale(2.2)"/>
+    <use href="#kid-b" transform="translate(1040 806) scale(2.2)"/>
+  </svg>
+  <div class="hero-t">
+    <div class="logo"><span style="animation-delay:.1s">T</span><span style="animation-delay:.2s">E</span><span style="animation-delay:.3s">X</span><span style="animation-delay:.4s">T</span><span style="animation-delay:.5s">O</span><span style="animation-delay:.6s">P</span><span style="animation-delay:.7s">I</span><span style="animation-delay:.8s">A</span><div class="seal"><i>글</i></div></div>
+    <div class="brush">텍스토피아</div>
+    <div class="tag">책 속의 문장을 모아, 나만의 마을을 짓다</div>
+    <div class="credit">JUST VUILD 2026 · 팀 코로롱</div>
+  </div>
+</section>
+
+<!-- 2 교육적 가치 -->
+<section class="slide" id="s2">
+  <div class="kicker rv">교육적 가치</div>
+  <h2 class="h2 rv d1">많이 읽기에서, 깊이 읽기로</h2>
+  <div class="versus">
+    <div class="vcard rv d1"><div class="stack-books" id="books-stack"></div><div class="counter"><span class="strike"><span id="cnt">0</span>권</span></div><h3>다독 경쟁</h3><p>권수 · 줄거리 확인 · 읽은 척</p></div>
+    <div class="arrow rv d2">→</div>
+    <div class="vcard rv d3"><div class="deep"><div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="onebook"></div></div><div class="counter" style="color:var(--blue)">1권</div><h3>깊이 읽기</h3><p>고른 문장 · 고른 이유 · 다시 읽은 생각</p></div>
+  </div>
+  <div class="values">
+    <div class="val rv d3"><b><em>①</em>근거 있는 감상</b><span>문장을 고르고 “왜”를 쓰며<br>자기 생각의 근거를 세워요</span></div>
+    <div class="val rv d4"><b><em>②</em>다양한 표현</b><span>글이 어려운 아이도 질문·책갈피<br>·그림으로 이해를 드러내요</span></div>
+    <div class="val rv d5"><b><em>③</em>다시 읽기</b><span>같은 책으로 돌아가 달라진<br>생각을 찾는 성찰의 습관</span></div>
+  </div>
+</section>
+
+<!-- 3 책 = 집 -->
+<section class="slide" id="s3">
+  <div class="kicker rv">책 한 권 = 집 한 채</div>
+  <h2 class="h2 rv d1">깊이 읽을수록 집이 자라요</h2>
+  <p class="lead rv d2">새 책을 늘려도 집은 커지지 않아요. 한 권에 생각을 더할 때만 그 책의 집이 자랍니다.</p>
+  <div class="stages">
+    <div class="st"><svg viewBox="0 0 200 180"><use href="#h-plot"/></svg><h3>부지</h3><p>책을 고르면<br>집터가 생겨요</p><span class="need">책 고르기</span></div>
+    <div class="st"><svg viewBox="0 0 200 180"><use href="#h-pit"/></svg><h3>움집</h3><p>마음에 남은 문장과<br>고른 이유</p><span class="need">문장 + 이유</span></div>
+    <div class="st"><svg viewBox="0 0 200 180"><use href="#h-thatch"/></svg><h3>초가집</h3><p>책갈피·표지를<br>직접 그려 걸기</p><span class="need">그림 표현</span></div>
+    <div class="st"><svg viewBox="0 0 200 180"><use href="#h-tile"/></svg><h3>기와집</h3><p>다시 읽고 달라진<br>생각 덧붙이기</p><span class="need">다시 읽기</span></div>
+  </div>
+</section>
+
+<!-- 4 text hip -->
+<section class="slide" id="s4">
+  <div class="kicker rv">text hip 구현</div>
+  <h2 class="h2 rv d1">나 · 지금 · 함께가 한 마을에서</h2>
+  <div class="hipwrap">
+    <div class="venn">
+      <div class="vc a"><h3>나</h3></div>
+      <div class="vc b"><h3>지금</h3></div>
+      <div class="vc c"><h3>함께</h3></div>
+      <div class="vcore">독서로 드러나는 취향</div>
+    </div>
+    <div class="how">
+      <div class="row rv d2"><div class="dot" style="background:var(--red)">나</div><div><b>내가 고른 문장이 곧 내 집</b><span>같은 책이라도 고른 문장과 이유, 그림이 달라 집이 모두 달라요.</span><br><i>문장+이유</i><i>나만의 표지</i><i>책갈피 액자</i></div></div>
+      <div class="row rv d3"><div class="dot" style="background:var(--blue)">지금</div><div><b>고전을 오늘의 내 말로</b><span>고전·인문 문장을 따라 쓰고, 책 속 인물에게 지금의 내가 질문해요.</span><br><i>서당 필사</i><i>인물에게 질문</i></div></div>
+      <div class="row rv d4"><div class="dot" style="background:var(--green)">함께</div><div><b>친구 집에 놀러 가는 독서</b><span>친구가 책을 어떻게 읽었는지 구경하고, 반 마을이 함께 자라요.</span><br><i>친구 집 방문</i><i>방명록</i><i>반 마을 건물</i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 마무리 -->
+<section class="slide" id="s5">
+  <div class="final-seal">讀</div>
+  <h2 class="h2 rv d1">읽은 만큼이 아니라,<br>읽은 대로 자라는 마을</h2>
+  <p class="lead rv d2">TEXTOPIA에서 독서는 숙제가 아니라 나를 보여 주는 방법이 됩니다.</p>
+  <div class="url rv d3"><b>textopia.samdae710.workers.dev</b><br>팀 코로롱</div>
+</section>
+
+<div class="hint">→ / 스페이스 / 클릭으로 넘기기</div>
+<div id="pg"></div><div id="bar"></div>
+</div>
+
+<script>
+(function(){
+  const stage=document.getElementById('stage'),slides=[...document.querySelectorAll('.slide')];
+  function fit(){const s=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform='translate(-50%,-50%) scale('+s+')';}
+  addEventListener('resize',fit);fit();
+
+  // 꽃잎
+  const s1=document.getElementById('s1');
+  for(let i=0;i<14;i++){const p=document.createElement('i');p.className='petal';p.style.left=(Math.random()*110)+'%';
+    p.style.animationDuration=(9+Math.random()*9)+'s';p.style.animationDelay=(-Math.random()*16)+'s';s1.appendChild(p);}
+  // 책 더미
+  const stack=document.getElementById('books-stack'),cols=['#C8492F','#3E5C7A','#5C9E61','#D9A441','#9A6440','#8E3B2A','#7FB3D5','#E9A3B4'];
+  for(let i=0;i<9;i++){const b=document.createElement('i');b.style.width=(80+Math.random()*60)+'px';b.style.background=cols[i%cols.length];b.style.animationDelay=(i*.16)+'s';stack.appendChild(b);}
+
+  function countUp(el,to,ms){const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/ms);el.textContent=Math.round(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(f);})(t0);}
+
+  let cur=-1;
+  function show(i){
+    i=Math.max(0,Math.min(slides.length-1,i));if(i===cur)return;
+    slides.forEach(s=>{s.classList.remove('active','on')});
+    const s=slides[i];s.classList.add('active');void s.offsetWidth;
+    setTimeout(()=>s.classList.add('on'),40);
+    if(s.id==='s2'){document.getElementById('cnt').textContent='0';setTimeout(()=>countUp(document.getElementById('cnt'),42,1800),300);}
+    cur=i;document.getElementById('pg').textContent=(i+1)+' / '+slides.length;
+    document.getElementById('bar').style.width=((i+1)/slides.length*100)+'%';
+    history.replaceState(null,'','#'+(i+1));
+  }
+  addEventListener('keydown',e=>{
+    if(['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();show(cur+1);}
+    if(['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(e.key)){e.preventDefault();show(cur-1);}
+    if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);
+    if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen();}
+  });
+  addEventListener('click',e=>{show(e.clientX<innerWidth/4?cur-1:cur+1);});
+  show((parseInt(location.hash.slice(1))||1)-1);
+})();
+</script>
+</body>
+</html>
